@@ -1,0 +1,719 @@
+<!DOCTYPE html>    
+<html>    
+<head>    
+<title>Birthday Surprise ❤️</title>    
+    
+<link href="https://fonts.googleapis.com/css2?family=Poppins&family=Pacifico&family=Playfair+Display&display=swap" rel="stylesheet">  
+    
+<style>    
+body{    
+  margin:0;    
+  font-family:Poppins;    
+  background:black;    
+  color:white;    
+  overflow-x:hidden;    
+  overflow-y:auto;    
+}    
+    
+/* SCREENS */    
+.screen{    
+  display:none;    
+  min-height:100vh;    
+  padding:20px;   /* gives breathing space */    
+  justify-content:center;    
+  align-items:center;    
+  flex-direction:column;    
+  text-align:center;    
+  background-size:cover;    
+  background-position:center;    
+}    
+    
+.active{display:flex;}    
+    
+/* BOX */    
+.box{    
+  background: rgba(0, 0, 0, 0.3);    
+  padding: 25px;    
+  border-radius: 25px;    
+  border: 1px solid rgba(255,255,255,0.1);    
+  box-shadow: 0 8px 25px rgba(0,0,0,0.3);    
+}    
+    
+/* INPUT */    
+input{    
+  padding:10px;    
+  border-radius:10px;    
+  border:none;    
+  text-align:center;    
+}    
+    
+/* BUTTON */    
+button{    
+  margin-top:10px;    
+  padding:10px 18px;    
+  border:none;    
+  border-radius:10px;    
+  background:hotpink;    
+  color:white;    
+  cursor:pointer;    
+}    
+    
+.backBtn{    
+  position:absolute;    
+  top:15px;    
+  left:15px;    
+  z-index:2000;    
+  padding:8px 14px;    
+  font-size:14px;    
+  background:rgba(0,0,0,0.6);    
+  border:1px solid rgba(255,255,255,0.2);    
+}    
+    
+/* GIF */    
+.gif{    
+  width:130px;    
+  margin:10px;    
+  border-radius:12px;    
+}    
+#candleVideo{    
+  width:200px;    
+  max-width:80vw;    
+  border-radius:15px;    
+}    
+    
+/* GAME */    
+#game h2, #game p {    
+  position: relative;    
+  z-index: 1000;    
+}    
+.fall{    
+  position:absolute;    
+  width:25px;   /* smaller size */    
+  z-index:999;    
+  top:0;    
+}    
+    
+/* CONFETTI */    
+.confetti{    
+  position:fixed;    
+  width:6px;    
+  height:14px;   /* make it rectangular like ribbon */    
+  background: pink;    
+  top:0;    
+  opacity:0.9;    
+  border-radius:2px;    
+  animation:fall 2s linear forwards;    
+}    
+    
+@keyframes fall{    
+  to{transform:translateY(100vh);}    
+}    
+    
+/* LETTER */    
+.letter{    
+  width:260px;    
+  min-height:160px;    
+  padding:15px;    
+  background:linear-gradient(135deg,#ff9a9e,#fad0c4);    
+  border-radius:25px;    
+  margin:10px;    
+  display:block;  
+  justify-content:center;    
+  align-items:center;    
+  font-family:Pacifico;    
+  font-size:22px;    
+  color:black;    
+  cursor:pointer;    
+  box-shadow:0 10px 30px rgba(255,192,203,0.4);    
+  overflow:auto;    
+}  
+    
+.inside{    
+  display:block;  
+  opacity:0;  
+  max-height:0;  
+  transition:0.5s ease;  
+  overflow:hidden;  
+  
+  font-family: 'Playfair Display', serif;    
+  font-size:17px;    
+  line-height:1.6;    
+  letter-spacing:0.3px;    
+  margin-top:10px;    
+  color:black;    
+  text-align:left;  
+}  
+    
+/* HEARTBEAT */    
+.heartbeat{    
+  animation:beat 1s infinite;    
+}    
+    
+@keyframes beat{    
+  0%,100%{transform:scale(1);}    
+  50%{transform:scale(1.08);}    
+}    
+    
+/* TYPING */    
+.typing{    
+  white-space:nowrap;    
+  overflow:hidden;    
+}    
+    
+.fallEmoji{    
+  position:absolute;    
+  z-index:999;    
+  user-select:none;    
+  transition:0.2s;    
+}
+.letterBack{
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2000;
+
+  padding: 10px 20px;
+  font-size: 16px;
+
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 12px;
+}
+
+</style>    
+</head>    
+    
+<body>    
+    
+<!-- AUDIO -->    
+<audio id="introAudio" src="audio1.mp3"></audio>    
+<audio id="bgMusic" src="song.mp3" loop></audio>    
+    
+<!-- LOCK -->    
+<div id="lock" class="screen active" style="background-image:url('bg1.webp')">    
+<div class="box">    
+<img src="glf1.gif" class="gif">    
+<h2>Hey Baby Enter Your DOB Here</h2>    
+<input id="pwd" placeholder="DD-MM-YY">    
+<br>    
+<button onclick="checkPwd()">Enter</button>    
+</div>    
+</div>    
+    
+<!-- INTRO -->    
+<div id="intro" class="screen" style="background-image:url('bg2.webp')">    
+<div class="box">    
+<img src="glf2.gif" class="gif">    
+<h2>Yayy Happy Birthday My Baby</h2>    
+<p>Play Audio I'll sing for you hehe</p>    
+<button onclick="playIntro()">Play Audio</button>    
+<button onclick="startNextFlow()">Next</button>    
+</div>    
+</div>    
+    
+<!-- CANDLE -->    
+<div id="candle" class="screen" style="background-image:url('bg3.webp')">    
+<div class="box">    
+<img src="glf3.gif" class="gif">    
+<h2>Make a wish and blow the candle🙏</h2>    
+    
+<!-- USE IMAGE OR VIDEO -->    
+<video id="candleVideo" class="gif" autoplay muted playsinline onclick="blow()">    
+  <source src="video.mp4" type="video/mp4">    
+</video>  
+
+<p id="wishText" style="
+  opacity:0;
+  transition:1s;
+  margin-top:15px;
+  text-align:center;
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:0.5px;
+">
+  Your wish is safe with me ❤️
+</p>
+<button id="nextAfterWish" onclick="go('gameIntro')" 
+style="opacity:0; margin-top:10px;">
+  Next ❤️
+</button>
+
+<button onclick="blow()">Blow Candle 💨</button>
+    
+    
+</div>    
+</div>    
+    
+<!-- GAME INTRO -->    
+<div id="gameIntro" class="screen" style="background-image:url('bg4.webp')">    
+<div class="box">    
+<img src="glf9.gif" class="gif">    
+<h2>May God fulfill all ur wishes💌</h2>    
+    
+<h2>So Now!</h2>    
+<h2>Ready for a little fun?😏</h2>    
+<p>Catch me 20 times to win 🎁</p>    
+<button onclick="go('game'); startGame()">Start Game 🎮</button>
+</div>    
+</div>    
+    
+<div id="game" class="screen" style="background:black">    
+<button class="backBtn" onclick="go('gameIntro')">Back</button>    
+<img src="glf4.gif" class="gif">    
+    
+    
+<h2>Catch me </h2>    
+<p>Score: <span id="score">0</span></p>    
+    
+    
+</div>    
+    
+<!-- WIN -->    
+<div id="win" class="screen">    
+<div class="box">    
+<img src="kiss.gif" class="gif">    
+<h2>🎉 You Won 🎉</h2>    
+<p>Here’s a gift for you 💋</p>    
+<button onclick="go('gift')">Continue</button>    
+</div>    
+</div>    
+    
+<!-- GIFTS -->    
+<div id="gift" class="screen" style="background-image:url('bg5.webp')">    
+<div class="box">    
+<img src="glf5.gif" class="gif">    
+<h2>Choose your letter 💌</h2>    
+    
+<div class="letter" onclick="openLetter(1)">Open 💌</div>    
+<div class="letter" onclick="openLetter(2)">Open 💌</div>    
+<div class="letter" onclick="openLetter(3)">Open 💌</div>    
+<button onclick="go('final1')">Next 💖</button>    
+    
+</div>    
+</div>    
+    
+<!-- LETTERS -->    
+<div id="l1" class="screen" style="background-image:url('bg-letter1.webp')">
+  <button class="letterBack" onclick="go('gift')">Back ❤️</button>
+  <div class="box">
+    <img src="glf11.gif" class="gif">
+    
+    <div class="letter">
+      <div class="inside">
+        Baby, words can’t describe how much I want to make you feel special… 
+        not even a letter or a whole website page could explain it. 
+        I’m so proud of you, really. Thank you for being born, for existing, 
+        for coming into my life. I hope you know how special you are to me, 
+        because I would never want to lose you. You’ve always encouraged me 
+        to become a better person, and I’m so lucky to be loved by you ❤️
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>  <!-- closes l1 -->
+<div id="l2" class="screen" style="background-image:url('bg-letter2.webp')">
+  <button class="letterBack" onclick="go('gift')">Back ❤️</button>
+  <div class="box">
+    <img src="glf12.gif" class="gif">
+
+    <div class="letter">
+      <div class="inside">
+        I hope you continue to be a blessing to everyone around you, just like you are to me. I pray that God protects you—from the smallest little things to the biggest ones. You deserve the whole world, my love. Please always remember that you are deeply loved by me. Stay strong no matter how hard life gets, okay? And I pray that your next birthday comes with even more happiness and good health, just like today… even better.
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div id="l3" class="screen" style="background-image:url('bg-letter3.webp')">
+  <button class="letterBack" onclick="go('gift')">Back ❤️</button>
+
+  <div class="box">
+    <img src="glf13.gif" class="gif">
+
+    <div class="letter">
+      <div class="inside">
+        Baby, your love is what makes me strong every single day. Thank you… really, thank you for loving me. I love you so much, okay? Let’s keep going together—capturing every good and bad memory and turning it into a beautiful story. I hope you always remember that you are strong, beautiful, smart, kind… everything. And please, take care of yourself for me—drink water, eat properly, and sleep well, that’s all I ask.
+        So yeah… Happy Birthday, my love. May God always bless you and protect you,I always miss you… a little more than I say ❤️
+      </div>
+    </div>
+
+  </div>
+</div>
+    
+<!-- FINAL PAGES -->    
+<div id="final1" class="screen" style="background-image:url('bg-final1.webp')">    
+<div class="box heartbeat">    
+<img src="glf15.gif" class="gif">    
+<p>Thank you for your patience My Lady💖</p>    
+<button onclick="go('final2')">Next</button>    
+</div>    
+</div>    
+    
+<div id="final2" class="screen" style="background-image:url('bg-final2.webp')">    
+<div class="box heartbeat">    
+<img src="glf16.gif" class="gif">    
+<p>I hope you enjoyed my mini love website, especially made for you with lots of love️❤️</p>    
+<button onclick="go('final3')">Next</button>    
+</div>    
+</div>    
+    
+<div id="final3" class="screen" style="background-image:url('bg-final3.webp')">    
+<div class="box heartbeat">    
+<img src="glf17.gif" class="gif">    
+<p id="typeText" class="typing"></p>    
+<button onclick="go('final2')">Back</button>    
+<button onclick="exitApp()">Exit 💔</button>    
+</div>    
+</div>    
+    
+<script>    
+    
+let score = 0;    
+let gameInterval = null;    
+let fallIntervals = [];    
+let gameActive = false;    
+    
+/* SCREEN SWITCH */    
+function go(id){    
+    
+  // STOP GAME WHEN LEAVING SCREEN    
+  if(id !== "game"){    
+    
+    gameActive = false;    
+    
+    clearInterval(gameInterval);    
+    
+    fallIntervals.forEach(i => clearInterval(i));    
+    fallIntervals = [];    
+    
+    document.querySelectorAll(".fallEmoji").forEach(e=>e.remove());    
+  }    
+    
+  document.querySelectorAll('.screen').forEach(s=>{    
+    s.style.display="none";    
+  });    
+    
+  document.getElementById(id).style.display="flex";    
+}    
+    
+/* PASSWORD */    
+function checkPwd(){    
+  let v=document.getElementById("pwd").value.replace(/\s/g,"");    
+    
+  if(v==="17-04-05"||v==="170405"){    
+    go('intro');    
+  } else {    
+    alert("Wrong password baby 😏");    
+  }    
+}    
+    
+/* INTRO AUDIO */    
+function playIntro(){    
+  let a=document.getElementById("introAudio");    
+  let bg=document.getElementById("bgMusic");    
+    
+  bg.pause();    
+  bg.currentTime=0;    
+    
+  a.currentTime=0;    
+  a.play();    
+}    
+    
+/* NEXT → START MUSIC → GO CANDLE */    
+function startNextFlow(){    
+    
+  let intro = document.getElementById("introAudio");    
+  let bg = document.getElementById("bgMusic");    
+    
+  /* STOP intro */    
+  intro.pause();    
+  intro.currentTime = 0;    
+    
+  /* START bg music with fade */    
+  bg.currentTime = 0;    
+  bg.loop = true;    
+  bg.volume = 0;    
+    
+  bg.play().catch(()=>{});    
+    
+  let vol = 0;    
+  let fade = setInterval(()=>{    
+    if(vol < 1){    
+      vol += 0.03;    
+      bg.volume = vol;    
+    } else {    
+      clearInterval(fade);    
+    }    
+  },150);    
+    
+  go('candle');    
+}    
+    
+/* CANDLE → JUST GO GAME (music already playing) */    
+/* CANDLE FUNCTION */
+function blow(){
+
+  let video = document.getElementById("candleVideo");
+  let text = document.getElementById("wishText");
+  let nextBtn = document.getElementById("nextAfterWish");
+
+  // flame fade
+  video.style.transition = "1.2s";
+  video.style.filter = "brightness(0)";
+  video.style.opacity = "0";
+
+  // slow motion
+  video.playbackRate = 0.6;
+
+  // show message  
+  setTimeout(()=>{  
+    text.style.opacity = "1";  
+  },800);
+
+  // show button AFTER message
+  setTimeout(()=>{  
+    nextBtn.style.opacity = "1";  
+  },1600);
+}
+
+    
+  function startGame(){    
+    
+  score = 0;    
+  gameActive = true;    
+    
+  document.getElementById("score").innerText = score;
+    
+  // MUCH FASTER SPAWN    
+  gameInterval = setInterval(()=>{    
+    
+    if(!gameActive) return;    
+        
+    if(document.querySelectorAll(".fallEmoji").length > 25) return;    
+    
+    let el = document.createElement("div");    
+    el.className = "fallEmoji";    
+    
+    el.style.left = Math.random()*95 + "vw";    
+    el.style.top = "-80px";    
+    el.style.position = "absolute";    
+    
+    let isTarget = Math.random() < 0.25; // 25% correct only (HARD 🔥)    
+    
+    if(isTarget){    
+    
+      let img = document.createElement("img");    
+      img.src = "me.png";    
+      img.style.width = "45px";    
+      img.style.borderRadius = "12px";    
+      img.style.boxShadow = "0 0 15px pink";    
+      el.appendChild(img);    
+    
+    } else {    
+    
+      let distractions = ["🎉","❤️","🎁"];    
+    
+if(Math.random() < 0.5){    
+    
+  // emoji distractions    
+  el.innerHTML = distractions[Math.floor(Math.random()*distractions.length)];    
+  el.style.fontSize = "28px";    
+    
+} else {    
+    
+  // image distractions (ADD YOUR IMAGE FILE NAMES)    
+  let imgs = ["d1.png","d2.png","d3.jpeg"];    
+    
+  let img = document.createElement("img");    
+  img.src = imgs[Math.floor(Math.random()*imgs.length)];    
+  img.style.width = "40px";    
+  img.style.borderRadius = "10px";    
+    
+  el.appendChild(img);    
+}    
+        
+        
+          
+    
+        
+          
+    }    
+    
+    document.body.appendChild(el);    
+    
+    // ⚡ FAST FALL SPEED    
+ let fallSpeed = 5 + Math.random()*1; // fast but smooth    
+    
+let y = -80; // starting position    
+    
+let f = setInterval(()=>{    
+  if(!gameActive){    
+    clearInterval(f);    
+    return;    
+  }    
+    
+  y += fallSpeed;    
+    
+  el.style.transform = `translateY(${y}px)`;    
+    
+  if(y > window.innerHeight){    
+    el.remove();    
+    clearInterval(f);    
+  }    
+},16);    
+    
+    fallIntervals.push(f);    
+    
+    // CLICK    
+    el.onclick = ()=>{    
+    
+      if(!gameActive) return;    
+    
+      if(isTarget){    
+    
+        score++;    
+        document.getElementById("score").innerText = score;    
+    
+        explode(el);    
+        el.remove();    
+    
+        if(score >= 15){    
+          gameActive = false;    
+          win();    
+        }    
+    
+      } else {    
+    
+        el.style.transform = "scale(0)";    
+        el.style.transition = "0.2s";    
+        setTimeout(()=>el.remove(),200);    
+      }    
+    };    
+    
+  },300); // ⚡ faster spawn (was 500)    
+}    
+    
+/* WIN */    
+function win(){    
+    
+  let colors = ["#ff4d6d","#ff85a2","#ffd166","#06d6a0","#4cc9f0","#f72585"];    
+    
+  for(let i=0;i<40;i++){    
+    let c=document.createElement("div");    
+    c.className="confetti";    
+    c.style.left=Math.random()*100+"vw";    
+    
+    // 🎨 random color    
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];    
+    
+    // ⏱ random delay for natural fall    
+    c.style.animationDelay = Math.random() + "s";    
+    
+    document.body.appendChild(c);    
+    
+    setTimeout(()=>c.remove(),2000);    
+  }    
+    
+  go('win');    
+}    
+    
+function explode(el){    
+    
+  for(let i=0;i<15;i++){    
+    let p = document.createElement("div");    
+    
+    let icons = ["❤️","💖","🎉","✨","💥"];    
+    p.innerText = icons[Math.floor(Math.random()*icons.length)];    
+    
+    p.style.position = "absolute";    
+    p.style.left = el.offsetLeft + "px";    
+    p.style.top = el.offsetTop + "px";    
+    p.style.fontSize = "18px";    
+    p.style.transition = "0.8s";    
+    p.style.pointerEvents = "none";    
+    
+    document.body.appendChild(p);    
+    
+    let x = (Math.random()-0.5)*200;    
+    let y = (Math.random()-0.5)*200;    
+    
+    setTimeout(()=>{    
+      p.style.transform = `translate(${x}px, ${y}px) scale(2)`;    
+      p.style.opacity = "0";    
+    },10);    
+    
+    setTimeout(()=>p.remove(),800);    
+  }    
+}    
+    
+/* LETTER */    
+function openLetter(n){  
+  go('l'+n);
+
+  setTimeout(()=>{
+    let letter = document.querySelector('#l'+n+' .inside');
+    if(letter){
+      letter.style.opacity = '1';
+      letter.style.maxHeight = '500px';
+    }
+  },100);
+}
+    
+/* TYPE EFFECT */    
+let text="Enjoy your day, I love you big❤️";    
+let i=0;    
+    
+function type(){    
+  if(i<text.length){    
+    document.getElementById("typeText").innerHTML+=text[i++];    
+    setTimeout(type,80);    
+  }    
+}    
+    
+setTimeout(type,2000);    
+    
+/* 👇 PASTE HERE */    
+function exitApp(){  
+  
+  let bg = document.getElementById("bgMusic");  
+  let intro = document.getElementById("introAudio");  
+  
+  if(bg){  
+    bg.pause();  
+    bg.currentTime = 0;  
+  }  
+  
+  if(intro){  
+    intro.pause();  
+    intro.currentTime = 0;  
+  }  
+  
+  window.close();  
+  
+  document.body.innerHTML = `  
+    <div style="  
+      height:100vh;  
+      display:flex;  
+      justify-content:center;  
+      align-items:center;  
+      background:black;  
+      color:white;  
+      font-family:Poppins;  
+      text-align:center;  
+    ">  
+      <h2>Babye❤️</h2>  
+    </div>  
+  `;  
+}  
+    
+    
+</script>    
+    
+</body>    
+</html>    
+ 
