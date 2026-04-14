@@ -13,6 +13,11 @@
 *{
   -webkit-tap-highlight-color: transparent;
 }
+
+html, body{
+  height:100%;
+  overflow:hidden;
+}
 body{
   margin:0;
   font-family:Poppins;
@@ -21,6 +26,7 @@ body{
   overflow:hidden;
   min-height:100vh;
   touch-action: manipulation;
+  overscroll-behavior: none;
 }
  
   
@@ -31,35 +37,67 @@ body{
   top:0;
   left:0;
   width:100%;
-  height:100vh;
+  height:100dvh; /* FIX for mobile height */
 
   padding:20px;
-  padding-bottom:40px;
   box-sizing:border-box;
 
-  justify-content:flex-start;
-  align-items:center;
+  justify-content:center;
+  align-items:center; 
   flex-direction:column;
   text-align:center;
 
   background-size:cover;
   background-position:center;
-  background-repeat: no-repeat;
+  background-repeat:no-repeat;
+
+  overflow:hidden; /* stop unwanted scrolling */
+}
+#candle{
   overflow-y:auto;
+  justify-content:flex-start;
+  padding-top:40px;
+}
+#l1, #l2, #l3{
+  overflow-y:auto;
+  justify-content:flex-start;
+  padding-top:40px;
 }
     
 .active{display:flex;}    
     
 /* BOX */
 .box{
-  background: rgba(0, 0, 0, 0.5);
+  position: relative;
+  
+  background: rgba(255, 255, 255, 0.12); /* more transparent */
+
   padding: 20px;
   border-radius: 20px;
-  border: 1px solid rgba(255,255,255,0.1);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+
+  border: 1px solid rgba(255,255,255,0.25);
+
+  box-shadow: 
+    0 8px 25px rgba(0,0,0,0.3),
+    inset 0 0 15px rgba(255,255,255,0.15);
+
   width: 90%;
   max-width: 350px;
-  margin: auto; 
+  margin: auto;
+}
+.box::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:20px;
+
+  background: linear-gradient(
+    120deg,
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.05)
+  );
+
+  pointer-events:none;
 }
     
 /* INPUT */    
@@ -72,7 +110,7 @@ input{
     
 /* BUTTON */    
 button{    
-  margin-top:10px;    
+  margin-top:12px;    
   padding:10px 18px;    
   border:none;    
   border-radius:10px;    
@@ -95,7 +133,7 @@ button{
 /* GIF */    
 .gif{    
   width:130px;    
-  margin:10px;    
+  margin:12px auto;
   border-radius:12px;    
 }    
 #candleVideo{    
@@ -108,7 +146,20 @@ button{
 #game h2, #game p {    
   position: relative;    
   z-index: 1000;    
-}    
+} 
+h2, p{
+  margin:8px 0;
+  line-height:1.4;
+}
+
+#gameIntro h2{
+  font-size:20px;
+}
+
+#gameIntro p{
+  font-size:16px;
+  opacity:0.9;
+}
 .fall{    
   position:absolute;    
   width:25px;   /* smaller size */    
@@ -136,32 +187,25 @@ button{
 .letter{
   width: 90%;
   max-width: 300px;
-  min-height: 180px;
-  padding:15px;
+  max-height: 60vh; /* 👈 IMPORTANT */
 
+  padding:15px;
   background:linear-gradient(135deg,#ff9a9e,#fad0c4);
   border-radius:25px;
 
   margin:10px auto;
-  display:block;
 
   font-family:Pacifico;
-  font-size:22px;
+  font-size:20px;
   color:black;
 
   cursor:pointer;
   box-shadow:0 10px 30px rgba(255,192,203,0.4);
 
   overflow:auto;
+  line-height:1.5;
 }
 
-.letter .inside{
-  opacity:0;
-  max-height:0;
-  overflow:hidden;
-  transition:0.6s;
-}
-    
 /* HEARTBEAT */    
 .heartbeat{    
   animation:beat 1s infinite;    
@@ -173,10 +217,10 @@ button{
 }    
     
 /* TYPING */    
-.typing{    
-  white-space:nowrap;    
-  overflow:hidden;    
-}    
+.typing{
+  white-space: normal;
+  overflow: visible;
+}
     
 .fallEmoji{
   position:absolute;
@@ -198,6 +242,25 @@ button{
   background: rgba(0,0,0,0.7);
   border: 1px solid rgba(255,255,255,0.2);
   border-radius: 12px;
+}
+h2, p {
+  display: inline-block;
+  background: rgba(255, 105, 180, 0.55); /* soft pink */
+  color: white;
+
+  padding: 6px 12px;
+  border-radius: 12px;
+
+  backdrop-filter: blur(4px);
+}
+#candle button:last-of-type {
+  font-size: 20px;
+  padding: 16px 28px;
+  border-radius: 18px;
+
+  background: linear-gradient(135deg, #ff4da6, #ff85c1);
+
+  box-shadow: 0 0 15px rgba(255, 105, 180, 0.6);
 }
 
 </style>    
@@ -266,7 +329,7 @@ style="opacity:0; margin-top:10px;">
     
 <!-- GAME INTRO -->    
 <div id="gameIntro" class="screen" style="background-image:url('bg4.webp')">    
-<div class="">    
+<div class="box">  
 <img src="glf9.gif" class="gif">    
 <h2>May God fulfill all ur wishes💌</h2>    
     
@@ -290,7 +353,7 @@ style="opacity:0; margin-top:10px;">
     
 <!-- WIN -->    
 <div id="win" class="screen">    
-<div class="">    
+<div class="box">   
 <img src="kiss.gif" class="gif">    
 <h2>🎉 You Won 🎉</h2>    
 <p>Here’s a gift for you 💋</p>    
@@ -300,7 +363,7 @@ style="opacity:0; margin-top:10px;">
     
 <!-- GIFTS -->    
 <div id="gift" class="screen" style="background-image:url('bg5.webp')">    
-<div class="">    
+<div class="box">  
 <img src="glf5.gif" class="gif">    
 <h2>Choose your letter 💌</h2>    
     
@@ -315,7 +378,7 @@ style="opacity:0; margin-top:10px;">
 <!-- LETTERS -->    
 <div id="l1" class="screen" style="background-image:url('bg-letter1.webp')">
   <button class="letterBack" onclick="go('gift')">Back ❤️</button>
-  <div class="">
+  <div class="box">
     <img src="glf11.gif" class="gif">
     
     <div class="letter">
@@ -335,7 +398,7 @@ style="opacity:0; margin-top:10px;">
 </div> <!-- closes l1 -->
 <div id="l2" class="screen" style="background-image:url('bg-letter2.webp')">
   <button class="letterBack" onclick="go('gift')">Back ❤️</button>
-  <div class="">
+  <div class="box">
     <img src="glf12.gif" class="gif">
 
     <div class="letter">
@@ -351,7 +414,7 @@ style="opacity:0; margin-top:10px;">
 <div id="l3" class="screen" style="background-image:url('bg-letter3.webp')">
   <button class="letterBack" onclick="go('gift')">Back ❤️</button>
 
-  <div class="">
+<div class="box">
     <img src="glf13.gif" class="gif">
 
     <div class="letter">
@@ -400,28 +463,27 @@ let fallIntervals = [];
 let gameActive = false;    
     
 /* SCREEN SWITCH */    
-function go(id){    
-    
-  // STOP GAME WHEN LEAVING SCREEN    
-  if(id !== "game"){    
-    
-    gameActive = false;    
-    
-    clearInterval(gameInterval);    
-    
-    fallIntervals.forEach(i => clearInterval(i));    
-    fallIntervals = [];    
-    
-    document.querySelectorAll(".fallEmoji").forEach(e=>e.remove());    
-  }    
-    
-  document.querySelectorAll('.screen').forEach(s=>{    
-    s.style.display="none";    
-  });    
-    
-  document.getElementById(id).style.display="flex";    
-}    
-    
+function go(id){
+
+  // stop game
+  if(id !== "game"){
+    gameActive = false;
+    clearInterval(gameInterval);
+    fallIntervals.forEach(i => clearInterval(i));
+    fallIntervals = [];
+    document.querySelectorAll(".fallEmoji").forEach(e=>e.remove());
+  }
+
+  // remove active from all
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.classList.remove("active");
+  });
+
+  // add active to current
+  document.getElementById(id).classList.add("active");
+
+}
+
 /* PASSWORD */    
 function checkPwd(){    
   let v=document.getElementById("pwd").value.replace(/\s/g,"");    
@@ -680,20 +742,9 @@ function openLetter(n){
     }
   },100);
 }
-    
-/* TYPE EFFECT */    
-let text="Enjoy your day, I love you big❤️";    
-let i=0;    
-    
-function type(){    
-  if(i<text.length){    
-    document.getElementById("typeText").innerHTML+=text[i++];    
-    setTimeout(type,80);    
-  }    
-}    
-    
-setTimeout(type,2000);    
-    
+document.getElementById("typeText").innerText =
+"Enjoy your day, I love you big ❤️";
+
 /* 👇 PASTE HERE */    
 function exitApp(){  
   
@@ -721,8 +772,7 @@ function exitApp(){
       font-family:Poppins;  
       text-align:center;  
     ">  
-      <h2>Bye Baby ❤️</h2>
-     <p>I love you always 💖</p> 
+      <h2>I love you always❤️"</h2>
     </div>  
   `;  
 }  
